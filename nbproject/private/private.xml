@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/Loading.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/home.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/doctor.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/connection/JDBCConnection.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/connection/UserDao.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/model/User.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/service/UserService.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/model/Account.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/service/AccountService.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/connection/AccountDao.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/LoginForm.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/model/Doctor.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/connection/DoctorDao.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/service/DoctorService.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/medicalRecord.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/model/Patient.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/service/PatientService.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/connection/PatientDao.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/patient.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/model/MedicalRecord.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/connection/MedicalRecordDao.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/service/MedicalRecordService.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/room.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/model/Room.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/connection/RoomDao.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/service/RoomService.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/patientDetailDialog.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/roompanel.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/account.java</file>
+            <file>file:/C:/CODE-PTIT/Java/projectCSDL/src/view/payment.java</file>
+        </group>
+    </open-files>
+</project-private>
