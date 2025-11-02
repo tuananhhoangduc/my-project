@@ -153,14 +153,12 @@ public class Loading extends javax.swing.JFrame {
         Connection testConn = JDBCConnection.getJDBCConnection();
         if (testConn == null) {
             logger.log(java.util.logging.Level.SEVERE, "Không thể khởi động ứng dụng do lỗi CSDL.");
-            // Hiển thị lỗi cho người dùng
             JOptionPane.showMessageDialog(null, 
                 "Không thể kết nối đến Cơ sở dữ liệu.\nHãy kiểm tra XAMPP hoặc MySQL Service.\nỨng dụng sẽ thoát.", 
                 "Lỗi CSDL", 
                 JOptionPane.ERROR_MESSAGE);
             System.exit(1); 
         } else {
-            // Phải đóng kết nối test này lại (vì ta dùng Factory Pattern)
             try {
                 testConn.close();
             } catch (SQLException e) {
