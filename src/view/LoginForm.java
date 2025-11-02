@@ -37,18 +37,14 @@ public class LoginForm extends javax.swing.JFrame {
         String username = jTextField1.getText();
         String password = new String(jPasswordField1.getPassword());
 
-        // Kiểm tra input
         if (username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ Username và Password!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // Gọi AccountService để kiểm tra
         Account account = accountService.login(username, password);
-
-        // Nếu Service trả về một đối tượng Account -> đăng nhập thành công
+        
         if (account != null) {
-            
             new home(account).setVisible(true);
             this.dispose(); 
         } else {
