@@ -34,19 +34,19 @@ public class roompanel extends javax.swing.JPanel {
     public roompanel() {
         initComponents();
         
-        setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Thêm viền
+        setBorder(BorderFactory.createLineBorder(Color.GRAY)); 
         setPreferredSize(new Dimension(120, 100));
     }
 
     public roompanel(Room room) {
-        initComponents(); // Khởi tạo các JLabel đã kéo thả
+        initComponents(); 
         this.roomData = room;
 
         setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        setPreferredSize(new Dimension(120, 100)); // Đặt kích thước
+        setPreferredSize(new Dimension(120, 100)); 
 
-        displayRoomInfo(); // Hiển thị thông tin
-        setupClickListener(); // Thêm sự kiện click
+        displayRoomInfo(); 
+        setupClickListener(); 
     }
     
     private void displayRoomInfo() {
@@ -93,7 +93,6 @@ public class roompanel extends javax.swing.JPanel {
     }
 
 
-    /** Thêm MouseListener để xử lý sự kiện click */
     private void setupClickListener() {
         // Chỉ cho phép click nếu phòng đang có người
         if (roomData != null && roomData.getCurrentOccupancy() > 0) {
