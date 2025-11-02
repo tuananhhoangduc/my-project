@@ -9,10 +9,8 @@ import service.MedicalRecordService;
 import service.RoomService;
 import java.math.BigDecimal;
 import javax.swing.*;
-// --- SỬA: Import Frame thay vì chỉ AWT ---
 import java.awt.Color;
 import java.awt.Frame;
-// --- KẾT THÚC SỬA ---
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -30,7 +28,7 @@ public class payment extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(payment.class.getName());
      private MedicalRecord currentRecord;
-    private medicalRecord parentForm; // Tham chiếu đến form cha
+    private medicalRecord parentForm; 
     private MedicalRecordService medicalRecordService;
     private RoomService roomService;
     private DecimalFormat currencyFormat = new DecimalFormat("#,##0 VND");
@@ -41,18 +39,17 @@ public class payment extends javax.swing.JFrame {
      */
     public payment() {
         initComponents();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE); // Sửa thành DISPOSE
-         setLocationRelativeTo(null); // Căn giữa
+         setLocationRelativeTo(null); 
          setTitle("Thanh toán");
     }
     
     public payment(Frame owner, MedicalRecord record, BigDecimal totalCostDecimal) {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(owner); // Căn giữa theo Frame cha
+        setLocationRelativeTo(owner);
         setTitle("Xác nhận Thanh toán cho BA: " + record.getRecordID());
 
-        // --- Khởi tạo ---
+        
         this.currentRecord = record;
         this.medicalRecordService = new MedicalRecordService();
         this.roomService = new RoomService();
@@ -60,7 +57,7 @@ public class payment extends javax.swing.JFrame {
             this.parentForm = (medicalRecord) owner;
         }
 
-        // --- Hiển thị tổng tiền ---
+        
         this.totalCostDecimal = totalCostDecimal != null ? totalCostDecimal : BigDecimal.ZERO; // Đảm bảo không null
         if (jTextField1 != null) {
             jTextField1.setText(currencyFormat.format(this.totalCostDecimal));
@@ -69,7 +66,7 @@ public class payment extends javax.swing.JFrame {
              jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         }
 
-        // --- Thêm sự kiện cho nút Xác nhận ---
+      
         setupActionListener();
     }
     
@@ -104,13 +101,13 @@ public class payment extends javax.swing.JFrame {
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                // 1. Cập nhật MedicalRecord
+                //Cập nhật MedicalRecord
                 Timestamp dischargeTime = new Timestamp(new Date().getTime());
                 currentRecord.setDischargeDate(dischargeTime);
                 currentRecord.setRecordStatus("Đã xuất viện");
                 medicalRecordService.updateMedicalRecord(currentRecord);
 
-                // 2. Cập nhật Room (nếu có)
+                //Cập nhật Room 
                 String roomIdToUpdate = currentRecord.getRoomID();
                 if (roomIdToUpdate != null) {
                      try {
@@ -129,7 +126,6 @@ public class payment extends javax.swing.JFrame {
                     parentForm.refreshData();
                 }
 
-                // 4. Đóng cửa sổ payment
                 dispose();
 
             } catch (SQLException ex) {
