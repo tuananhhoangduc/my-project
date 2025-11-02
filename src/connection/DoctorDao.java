@@ -26,7 +26,6 @@ public class DoctorDao {
         List<Doctor> doctors = new ArrayList<>();
         String sql = "SELECT * FROM Doctors";
 
-        // Sử dụng try-with-resources để tự động đóng kết nối và statement
         try (Connection connection = JDBCConnection.getJDBCConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql);
              ResultSet rs = preparedStatement.executeQuery()) {
@@ -44,7 +43,7 @@ public class DoctorDao {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Lỗi khi lấy danh sách bác sĩ", ex);
              JOptionPane.showMessageDialog(null, 
-                    "Lỗi nghiêm trọng: Không thể tải danh sách bác sĩ.\n" + ex.getMessage(), 
+                    "Lỗi không thể tải danh sách bác sĩ.\n" + ex.getMessage(), 
                     "Lỗi CSDL", 
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -89,10 +88,8 @@ public class DoctorDao {
         }
     }
 
-    /**
+    /*
      * Xóa một bác sĩ
-     * @param doctorID
-     * @throws java.sql.SQLException
      */
     public void deleteDoctor(String doctorID) throws SQLException {
         String sql = "DELETE FROM Doctors WHERE DoctorID = ?";
