@@ -31,40 +31,32 @@ public class room extends javax.swing.JFrame {
     }
     
     private void loadAndDisplayRooms() {
-        if (roomGridPanel == null) { // Kiểm tra nếu panel lưới chưa được khởi tạo
-            logger.severe("roomGridPanel chưa được khởi tạo!");
-            JOptionPane.showMessageDialog(this, "Lỗi: Panel hiển thị lưới phòng chưa sẵn sàng!", "Lỗi Giao diện", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        roomGridPanel.removeAll(); // Xóa các ô phòng cũ (nếu có) trước khi tải lại
+        
+        roomGridPanel.removeAll(); 
 
         try {
-            List<Room> rooms = roomService.getAllRooms(); // Lấy danh sách phòng từ service
+            List<Room> rooms = roomService.getAllRooms(); 
             if (rooms == null || rooms.isEmpty()) {
-                // Hiển thị thông báo nếu không có phòng nào
-                roomGridPanel.setLayout(new BorderLayout()); // Đổi layout tạm thời để căn giữa label
+                roomGridPanel.setLayout(new BorderLayout()); 
                 roomGridPanel.add(new JLabel("Không có dữ liệu phòng bệnh.", SwingConstants.CENTER));
             } else {
-                // --- SỬA: Đảm bảo GridLayout được thiết lập lại ---
-                 // Thiết lập lại GridLayout (quan trọng sau khi removeAll)
-                 // Lấy số cột từ layout hiện tại hoặc đặt lại
-                 int cols = 4; // Mặc định 5 cột, bạn có thể chỉnh lại
+                
+                 int cols = 4; 
                  if (roomGridPanel.getLayout() instanceof GridLayout) {
                      cols = ((GridLayout)roomGridPanel.getLayout()).getColumns();
-                     if (cols <= 0) cols = 4; // Đặt lại nếu số cột không hợp lệ
+                     if (cols <= 0) cols = 4; 
                  } else {
-                      // Nếu layout không phải GridLayout, đặt lại
-                      roomGridPanel.setLayout(new GridLayout(0, cols, 10, 10)); // 0 hàng, cols cột, gap 10
+                      
+                      roomGridPanel.setLayout(new GridLayout(0, cols, 10, 10)); 
                  }
-                 ((GridLayout)roomGridPanel.getLayout()).setColumns(cols); // Đảm bảo số cột đúng
-                 ((GridLayout)roomGridPanel.getLayout()).setRows(0); // Tự động thêm hàng
+                 ((GridLayout)roomGridPanel.getLayout()).setColumns(cols);
+                 ((GridLayout)roomGridPanel.getLayout()).setRows(0); 
 
 
-                // Tạo và thêm từng ô RoomPanel vào lưới
+                // Tạo và thêm ô 
                 for (Room room : rooms) {
-                    roompanel panel = new roompanel(room); // Tạo ô phòng với dữ liệu
-                    roomGridPanel.add(panel);          // Thêm ô vào lưới
+                    roompanel panel = new roompanel(room); 
+                    roomGridPanel.add(panel);         
                 }
             }
         } catch (Exception ex) {
@@ -74,10 +66,9 @@ public class room extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Lỗi nghiêm trọng khi tải dữ liệu phòng:\n" + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
 
-        // Cập nhật lại giao diện sau khi thêm các ô
+        
         roomGridPanel.revalidate();
         roomGridPanel.repaint();
-         // Cập nhật cả JScrollPane nếu cần
          if (jScrollPane1 != null) {
             jScrollPane1.revalidate();
             jScrollPane1.repaint();
