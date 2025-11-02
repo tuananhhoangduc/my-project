@@ -36,12 +36,7 @@ public class MedicalRecordService {
     }
     
     public MedicalRecord getMedicalRecordById(String recordID) {
-         try {
-            return medicalRecordDao.getMedicalRecordById(recordID);
-         } catch (Exception e) {
-             logger.log(Level.SEVERE, "Lỗi nghiêm trọng khi lấy bệnh án theo ID từ Service: " + recordID, e);
-             return null; 
-         }
+        return medicalRecordDao.getMedicalRecordById(recordID);
     }
 
     public void addMedicalRecord(MedicalRecord record) throws SQLException {
