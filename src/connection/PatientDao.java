@@ -22,9 +22,8 @@ import java.util.logging.Logger;
 public class PatientDao {
     private static final Logger logger = Logger.getLogger(PatientDao.class.getName());
 
-    /**
-     * Lấy tất cả bệnh nhân
-     */
+    
+    // Lấy tất cả bệnh nhân
     public List<Patient> getAllPatients() {
         List<Patient> patients = new ArrayList<>();
         String sql = "SELECT * FROM Patients";
@@ -49,9 +48,7 @@ public class PatientDao {
         return patients;
     }
 
-    /**
-     * Thêm bệnh nhân mới
-     */
+    // Thêm bệnh nhân mới
     public void addPatient(Patient patient) throws SQLException {
         String sql = "INSERT INTO Patients(PatientID, FullName, DateOfBirth, Gender, PhoneNumber, Address) VALUES (?, ?, ?, ?, ?, ?)";
         
@@ -68,9 +65,7 @@ public class PatientDao {
         }
     }
 
-    /**
-     * Cập nhật thông tin bệnh nhân
-     */
+    // Cập nhật thông tin bệnh nhân
     public void updatePatient(Patient patient) throws SQLException {
         String sql = "UPDATE Patients SET FullName = ?, DateOfBirth = ?, Gender = ?, PhoneNumber = ?, Address = ?  WHERE PatientID = ?";
         
@@ -88,9 +83,7 @@ public class PatientDao {
         }
     }
 
-    /**
-     * Xóa bệnh nhân
-     */
+    // Xóa bệnh nhân
     public void deletePatient(String patientID) throws SQLException {
         String sql = "DELETE FROM Patients WHERE PatientID = ?";
         
@@ -101,9 +94,7 @@ public class PatientDao {
             preparedStatement.executeUpdate();
         }
     }
-    /**
-     * Tìm bệnh nhân theo ID
-     */
+    // Tìm bệnh nhân theo ID
     public Patient getPatientById(String patientID) {
         String sql = "SELECT * FROM Patients WHERE PatientID = ?";
         
@@ -127,6 +118,6 @@ public class PatientDao {
         } catch (SQLException ex) {
             logger.log(Level.SEVERE, "Lỗi khi tìm bệnh nhân", ex);
         }
-        return null; // Không tìm thấy
+        return null;
     }
 }
