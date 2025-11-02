@@ -35,7 +35,6 @@ public class AccountDao {
                 logger.log(Level.SEVERE, "Không thể kết nối đến CSDL.");
                 return null;
             }
-            
             pstmt.setString(1, username);
             pstmt.setString(2, password);
             
@@ -50,13 +49,12 @@ public class AccountDao {
                     return account;
                 }
             }
-            
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Lỗi khi truy vấn đăng nhập", e);
         }
-        
         return null; 
     }
+    
     
      public List<Account> getAllAccounts() {
         List<Account> accounts = new ArrayList<>();
@@ -70,7 +68,7 @@ public class AccountDao {
                 Account account = new Account();
                 account.setAccountId(rs.getString("AccountID"));
                 account.setUsername(rs.getString("Username"));
-                account.setPassword(rs.getString("Password")); // Cân nhắc không lấy pass
+                account.setPassword(rs.getString("Password"));
                 account.setRole(rs.getString("Role"));
                 accounts.add(account);
             }
@@ -100,8 +98,8 @@ public class AccountDao {
         }
     }
 
-    /**
-     * Cập nhật thông tin tài khoản 
+    /*
+      Cập nhật thông tin tài khoản 
      */
     public void updateAccount(Account account) throws SQLException {
         String sql = "UPDATE Accounts SET Password = ?, Role = ? WHERE AccountID = ?";
@@ -119,7 +117,9 @@ public class AccountDao {
         }
     }
     
-    
+    /*
+    Tìm tài khoản bằng ID
+    */
     public Account getAccountById(String accountID) {
         String sql = "SELECT * FROM Accounts WHERE AccountID = ?";
         try (Connection connection = JDBCConnection.getJDBCConnection();
