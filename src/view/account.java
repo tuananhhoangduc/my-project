@@ -26,7 +26,7 @@ public class account extends javax.swing.JFrame {
     public account() {
         initComponents();
         accountService = new AccountService();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Chỉ đóng cửa sổ này
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
         setLocationRelativeTo(null);
         
         initializeTable();
@@ -37,13 +37,9 @@ public class account extends javax.swing.JFrame {
     private void initializeTable() {
         tableModel = new DefaultTableModel();
         tableModel.setColumnIdentifiers(new String[]{"Account ID", "Username","Password", "Vai trò"});
-        // Không hiển thị mật khẩu trong bảng!
-        if (jTable1 != null) { // Dùng jTable1
-            jTable1.setModel(tableModel);
-            jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        } else {
-             logger.severe("jTable1 chưa được khởi tạo!");
-        }
+      
+        jTable1.setModel(tableModel);
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     
     private void loadAccounts() {
@@ -68,33 +64,30 @@ public class account extends javax.swing.JFrame {
     }
     
     private void clearFields() {
-        if(jTextField1 != null) jTextField1.setText(""); // ID
-        if(jTextField2 != null) jTextField2.setText(""); // Username
-        if(jTextField3 != null) jTextField3.setText(""); // Password
-        if(buttonGroup1 != null) buttonGroup1.clearSelection(); // Xóa chọn Role
-        if(jTextField1 != null) jTextField1.setEditable(true); // Cho phép sửa ID
+        if(jTextField1 != null) jTextField1.setText(""); 
+        if(jTextField2 != null) jTextField2.setText(""); 
+        if(jTextField3 != null) jTextField3.setText(""); 
+        if(buttonGroup1 != null) buttonGroup1.clearSelection(); 
+        if(jTextField1 != null) jTextField1.setEditable(true);
         if(jTable1 != null) jTable1.clearSelection();
     }
     
-    // --- THÊM MỚI: Hàm lấy dữ liệu từ form ---
     private Account getAccountFromFields() {
         Account account = new Account();
         if(jTextField1 != null) account.setAccountId(jTextField1.getText().trim());
         if(jTextField2 != null) account.setUsername(jTextField2.getText().trim());
         if(jTextField3 != null) account.setPassword(jTextField3.getText().trim()); // Lấy pass
         
-        // Sử dụng tên biến jRadioButtonUser và jRadioButtonAdmin
         if(jRadioButton1 != null && jRadioButton1.isSelected()) {
-            account.setRole("Doctor"); // Giả sử "User" là "Doctor"
+            account.setRole("Doctor"); 
         } else if (jRadioButton2 != null && jRadioButton2.isSelected()) {
             account.setRole("Admin");
         } else {
-            account.setRole(null); // Hoặc vai trò mặc định
+            account.setRole(null); 
         }
         return account;
     }
 
-    // --- THÊM MỚI: Hàm sự kiện click bảng ---
     private void addTableSelectionListener() {
         if (jTable1 == null) return;
         jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
@@ -104,7 +97,6 @@ public class account extends javax.swing.JFrame {
 
                 String accountID = tableModel.getValueAt(selectedRow, 0).toString();
                 
-                // Lấy thông tin chi tiết (bao gồm cả pass) từ DB để chuẩn bị cho Update
                 Account acc = accountService.getAccountById(accountID);
                 if (acc == null) {
                      JOptionPane.showMessageDialog(this, "Không thể lấy chi tiết tài khoản.", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -114,11 +106,10 @@ public class account extends javax.swing.JFrame {
 
                 if(jTextField1 != null) {
                     jTextField1.setText(acc.getAccountId());
-                    jTextField1.setEditable(false); // Không cho sửa ID
+                    jTextField1.setEditable(false); 
                 }
                 if(jTextField2 != null) jTextField2.setText(acc.getUsername());
-                 if(jTextField3 != null) jTextField3.setText(acc.getPassword()); 
-                // Không hiển thị mật khẩu cũ, yêu cầu nhập mới nếu muốn đổi
+                if(jTextField3 != null) jTextField3.setText(acc.getPassword()); 
                 if(jTextField3 != null) jTextField3.setText(""); 
                 if(jRadioButton1 != null && ("Doctor".equals(acc.getRole()) || "User".equals(acc.getRole()))) {
                     jRadioButton1.setSelected(true);
@@ -427,8 +418,6 @@ public class account extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             Account account = getAccountFromFields();
-            
-            // Kiểm tra ràng buộc
             if (account.getAccountId().isEmpty() || account.getUsername().isEmpty() || account.getPassword().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "ID, Tài khoản và Mật khẩu không được để trống!", "Lỗi", JOptionPane.WARNING_MESSAGE);
                 return;
@@ -463,19 +452,15 @@ public class account extends javax.swing.JFrame {
         }
         try {
             Account account = getAccountFromFields();
-            
-            // Xử lý logic mật khẩu: Nếu ô mật khẩu (jTextField3) trống,
-            // giữ nguyên mật khẩu cũ. Nếu có nhập, dùng mật khẩu mới.
             if (account.getPassword().isEmpty()) {
-                 // Lấy mật khẩu cũ từ CSDL
+                
                  Account oldAccount = accountService.getAccountById(account.getAccountId());
                  if (oldAccount != null) {
-                     account.setPassword(oldAccount.getPassword()); // Giữ mật khẩu cũ
+                     account.setPassword(oldAccount.getPassword()); 
                  } else {
                       throw new SQLException("Không tìm thấy tài khoản cũ để giữ mật khẩu.");
                  }
-            } // Nếu không trống, account đã có pass mới từ getAccountFromFields()
-
+            } 
             accountService.updateAccount(account);
             JOptionPane.showMessageDialog(this, "Cập nhật tài khoản thành công!");
             loadAccounts();
@@ -506,7 +491,7 @@ public class account extends javax.swing.JFrame {
             return;
         }
         
-        String accountID = jTextField1.getText(); // Lấy ID từ form
+        String accountID = jTextField1.getText(); 
         
         int confirm = JOptionPane.showConfirmDialog(this, 
                 "Bạn có chắc chắn muốn xóa tài khoản '" + accountID + "' không?\n(Nếu tài khoản này đang được bác sĩ sử dụng, liên kết sẽ bị gỡ bỏ)", 
