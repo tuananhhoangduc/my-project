@@ -18,8 +18,9 @@ import java.util.logging.Logger;
  * Bài Tập : 
  */
 public class RoomService {
-     private RoomDao roomDao;
-      private static final Logger logger = Logger.getLogger(RoomService.class.getName());
+    private RoomDao roomDao;
+    private static final Logger logger = Logger.getLogger(RoomService.class.getName());
+    
     public RoomService() {
         roomDao = new RoomDao();
     }
@@ -32,23 +33,13 @@ public class RoomService {
         return roomDao.getPatientsInRoom(roomId);
     }
     
-     /**
-     * Gọi DAO để cập nhật số lượng người trong phòng
-     * @param roomId ID phòng
-     * @param change +1 hoặc -1
-     * @throws SQLException Nếu có lỗi SQL từ DAO
-     */
     public void updateRoomOccupancy(String roomId, int change) throws SQLException {
         roomDao.updateRoomOccupancy(roomId, change);
     }
     
     public Room getRoomById(String roomId) {
-        try {
+
             return roomDao.getRoomById(roomId);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Lỗi Service khi lấy phòng theo ID: " + roomId, e);
-            return null; 
-        }
     } 
     
     public List<Room> getAvailableRooms() {
