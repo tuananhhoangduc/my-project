@@ -31,10 +31,7 @@ public class doctor extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         initializeTable();
-        // Tải dữ liệu lên JTable
         loadDoctors();
-        
-        // Thêm sự kiện click cho các nút
         addListeners();
     }
     
@@ -87,7 +84,7 @@ public class doctor extends javax.swing.JFrame {
         jButton4.addActionListener(e -> clearFields());
 
         // Nút BACK (jButton5)
-        jButton5.addActionListener(e -> this.dispose()); // Chỉ đóng cửa sổ này
+        jButton5.addActionListener(e -> this.dispose()); 
         
         // Sự kiện Click vào JTable
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -118,7 +115,6 @@ public class doctor extends javax.swing.JFrame {
         });
     }
 
-    // --- THÊM MỚI: Logic cho nút ADD ---
     private void addDoctor() {
         try {
             Doctor doctor = new Doctor();
@@ -142,8 +138,8 @@ public class doctor extends javax.swing.JFrame {
 
             doctorService.addDoctor(doctor);
             JOptionPane.showMessageDialog(this, "Thêm bác sĩ thành công!");
-            loadDoctors(); // Tải lại bảng
-            clearFields(); // Xóa ô input
+            loadDoctors(); 
+            clearFields(); 
             
         } catch (SQLException ex) {
             if (ex.getMessage().contains("Duplicate entry")) {
