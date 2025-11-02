@@ -19,7 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
-import java.sql.SQLException; // Import SQLException
+import java.sql.SQLException; 
 import java.util.logging.Level;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,7 +38,7 @@ public class medicalRecord extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(medicalRecord.class.getName());
     private MedicalRecordService medicalRecordService;
-    private RoomService roomService; // Thêm RoomService
+    private RoomService roomService; 
     private DefaultTableModel tableModel;
     private SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private Map<String, String> patientNameToIdMap;
@@ -54,7 +54,7 @@ public class medicalRecord extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
          medicalRecordService = new MedicalRecordService();
-        roomService = new RoomService(); // Khởi tạo RoomService
+        roomService = new RoomService(); 
         patientNameToIdMap = new HashMap<>();
         doctorNameToIdMap = new HashMap<>();
         roomNumberToIdMap = new HashMap<>();
@@ -158,21 +158,17 @@ public class medicalRecord extends javax.swing.JFrame {
          } else {
               logger.warning("Không tìm thấy phòng hoặc giá phòng để tính tiền cho RoomID: " + selectedRecord.getRoomID());
               JOptionPane.showMessageDialog(this, "Không tìm thấy thông tin phòng hoặc giá phòng để tính tiền!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-              // Cân nhắc có nên return ở đây không, tùy yêu cầu
-              // return;
+               return;
          }
          
-
-         // --- Mở payment ---
          logger.info("Mở cửa sổ Thanh toán cho Record ID: " + selectedRecord.getRecordID());
-         // Gọi constructor mới nhận BigDecimal
-         payment paymentWindow = new payment(this, selectedRecord, totalCostDecimal); // Truyền BigDecimal
+         
+         payment paymentWindow = new payment(this, selectedRecord, totalCostDecimal); 
          paymentWindow.setVisible(true);
      }
 
      
      public void refreshData() {
-          logger.info("Làm mới dữ liệu sau khi xuất viện...");
           loadMedicalRecords();
           populateComboBoxes(); 
           clearFields();
@@ -428,18 +424,17 @@ public class medicalRecord extends javax.swing.JFrame {
          boolean isCurrentlyOccupying = "Đang điều trị".equals(recordStatus);
 
          try {
-             // TH1: Chuyển từ không phòng -> có phòng (hoặc thêm mới vào phòng)
+             //Chuyển từ không phòng -> có phòng (hoặc thêm mới vào phòng)
              if (oldRoomId == null && newRoomId != null && isCurrentlyOccupying) {
                  roomService.updateRoomOccupancy(newRoomId, +1);
                  logger.info("Đã cập nhật phòng " + newRoomId + ", số người +1");
              }
-             // TH2: Chuyển từ có phòng -> không phòng (xuất viện, hủy, chuyển ngoại trú)
-             // Hoặc giữ nguyên ở phòng cũ nhưng không còn chiếm chỗ (xuất viện/hủy)
+             //Chuyển từ có phòng -> không phòng 
              else if (oldRoomId != null && (newRoomId == null || !isCurrentlyOccupying) ) {
                  roomService.updateRoomOccupancy(oldRoomId, -1);
                  logger.info("Đã cập nhật phòng " + oldRoomId + ", số người -1");
              }
-             // TH3: Chuyển từ phòng A -> phòng B (và vẫn đang điều trị)
+             //Chuyển từ phòng A -> phòng B 
              else if (oldRoomId != null && newRoomId != null && !oldRoomId.equals(newRoomId) && isCurrentlyOccupying) {
                  roomService.updateRoomOccupancy(oldRoomId, -1);
                  logger.info("Đã cập nhật phòng " + oldRoomId + ", số người -1");
@@ -476,7 +471,7 @@ public class medicalRecord extends javax.swing.JFrame {
     private void searchMedicalRecord() {
          String recordID = (jTextFieldSearch != null) ? jTextFieldSearch.getText().trim() : "";
          if (recordID.isEmpty()) {
-             loadMedicalRecords(); // Tải lại tất cả nếu ô trống
+             loadMedicalRecords(); 
              return;
          }
 
