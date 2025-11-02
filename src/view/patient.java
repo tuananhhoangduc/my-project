@@ -66,14 +66,14 @@ public class patient extends javax.swing.JFrame {
     }
      
      private void clearFields() {
-        jTextField1.setText(""); // ID
-        jTextField2.setText(""); // Name
-        jTextField3.setText(""); // Phone
-        jTextField4.setText(""); // Birthday
-        jTextField5.setText(""); // Address
-        // jTextField7.setText(""); // Search (Không cần xóa ô search)
-        buttonGroup1.clearSelection(); // Xóa chọn Nam/Nữ
-        jTextField1.setEditable(true); // Cho phép nhập ID trở lại
+        jTextField1.setText(""); 
+        jTextField2.setText(""); 
+        jTextField3.setText(""); 
+        jTextField4.setText(""); 
+        jTextField5.setText(""); 
+        jTextField7.setText(""); 
+        buttonGroup1.clearSelection(); 
+        jTextField1.setEditable(true); 
     }
      
     private Patient getPatientFromFields() throws ParseException {
@@ -83,7 +83,6 @@ public class patient extends javax.swing.JFrame {
         patient.setPhoneNumber(jTextField3.getText());
         patient.setAddress(jTextField5.getText());
         
-        // Chuyển đổi String (YYYY-MM-DD) sang java.sql.Date
         if (!jTextField4.getText().isEmpty()) {
             java.util.Date parsedDate = dateFormat.parse(jTextField4.getText());
             patient.setDateOfBirth(new java.sql.Date(parsedDate.getTime()));
@@ -108,13 +107,13 @@ public class patient extends javax.swing.JFrame {
                 int selectedRow = jTable1.getSelectedRow();
                 
                 // Lấy dữ liệu từ hàng đã chọn và điền vào form
-                jTextField1.setText(tableModel.getValueAt(selectedRow, 0).toString()); // ID
-                jTextField1.setEditable(false); // Không cho sửa ID
+                jTextField1.setText(tableModel.getValueAt(selectedRow, 0).toString()); 
+                jTextField1.setEditable(false); 
                 
-                jTextField2.setText(tableModel.getValueAt(selectedRow, 1).toString()); // Name
+                jTextField2.setText(tableModel.getValueAt(selectedRow, 1).toString()); 
                 
                 Object dobObj = tableModel.getValueAt(selectedRow, 2);
-                jTextField4.setText(dobObj != null ? dateFormat.format(dobObj) : ""); // Birthday
+                jTextField4.setText(dobObj != null ? dateFormat.format(dobObj) : ""); 
                 
                 String gender = tableModel.getValueAt(selectedRow, 3).toString();
                 if ("Nam".equals(gender)) {
@@ -125,10 +124,10 @@ public class patient extends javax.swing.JFrame {
                     buttonGroup1.clearSelection();
                 }
                 
-                jTextField3.setText(tableModel.getValueAt(selectedRow, 4).toString()); // Phone
+                jTextField3.setText(tableModel.getValueAt(selectedRow, 4).toString()); 
                 
                 Object addrObj = tableModel.getValueAt(selectedRow, 5);
-                jTextField5.setText(addrObj != null ? addrObj.toString() : ""); // Address
+                jTextField5.setText(addrObj != null ? addrObj.toString() : ""); 
             }
         });
     }
@@ -475,8 +474,8 @@ public class patient extends javax.swing.JFrame {
             }
             patientService.addPatient(patient);
             JOptionPane.showMessageDialog(this, "Thêm bệnh nhân thành công!");
-            loadPatients(); // Tải lại bảng
-            clearFields(); // Xóa form
+            loadPatients(); 
+            clearFields(); 
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Lỗi định dạng ngày sinh. Vui lòng nhập YYYY-MM-DD.", "Lỗi Định dạng", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
@@ -500,8 +499,8 @@ public class patient extends javax.swing.JFrame {
             Patient patient = getPatientFromFields();
             patientService.updatePatient(patient);
             JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-            loadPatients(); // Tải lại bảng
-            clearFields(); // Xóa form
+            loadPatients(); 
+            clearFields(); 
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Lỗi định dạng ngày sinh. Vui lòng nhập YYYY-MM-DD.", "Lỗi Định dạng", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
@@ -519,13 +518,13 @@ public class patient extends javax.swing.JFrame {
         // TODO add your handling code here:
          String patientID = jTextField7.getText();
         if (patientID.isEmpty()) {
-            loadPatients(); // Nếu ô tìm kiếm trống, tải lại tất cả
+            loadPatients(); 
             return;
         }
         
         Patient patient = patientService.getPatientById(patientID);
         
-        tableModel.setRowCount(0); // Xóa bảng
+        tableModel.setRowCount(0); 
         if (patient != null) {
             // Hiển thị chỉ 1 kết quả
             tableModel.addRow(new Object[]{
@@ -537,7 +536,6 @@ public class patient extends javax.swing.JFrame {
                 patient.getAddress()
             });
         } else {
-            // Không tìm thấy
             JOptionPane.showMessageDialog(this, "Không tìm thấy bệnh nhân với ID: " + patientID, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jTextField7ActionPerformed
@@ -564,8 +562,8 @@ public class patient extends javax.swing.JFrame {
                 String patientID = jTextField1.getText();
                 patientService.deletePatient(patientID);
                 JOptionPane.showMessageDialog(this, "Xóa thành công!");
-                loadPatients(); // Tải lại bảng
-                clearFields(); // Xóa form
+                loadPatients(); 
+                clearFields(); 
             } catch (SQLException ex) {
                  if (ex.getMessage().contains("foreign key constraint fails")) {
                     JOptionPane.showMessageDialog(this, "Lỗi: Không thể xóa bệnh nhân đang có bệnh án!", "Lỗi Ràng buộc", JOptionPane.ERROR_MESSAGE);
