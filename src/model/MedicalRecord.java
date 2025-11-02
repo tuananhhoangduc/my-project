@@ -97,7 +97,6 @@ public class MedicalRecord {
         this.recordStatus = recordStatus;
     }
 
-    // Getters/Setters cho các trường hiển thị thêm
     public String getPatientName() {
         return patientName;
     }
