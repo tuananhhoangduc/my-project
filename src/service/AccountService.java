@@ -30,21 +30,11 @@ public class AccountService {
     }
     
     public List<Account> getAllAccounts() {
-        try {
             return accountDao.getAllAccounts();
-        } catch (Exception e) {
-             logger.log(Level.SEVERE, "Lỗi Service khi lấy tất cả tài khoản", e);
-             return Collections.emptyList(); 
-        }
     }
     
     public Account getAccountById(String accountID) {
-         try {
             return accountDao.getAccountById(accountID);
-         } catch (Exception e) {
-             logger.log(Level.SEVERE, "Lỗi Service khi lấy tài khoản theo ID: " + accountID, e);
-             return null;
-         }
     }
     
     public void addAccount(Account account) throws SQLException, IllegalArgumentException {
