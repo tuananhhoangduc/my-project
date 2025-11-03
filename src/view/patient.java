@@ -74,6 +74,7 @@ public class patient extends javax.swing.JFrame {
         jTextField7.setText(""); 
         buttonGroup1.clearSelection(); 
         jTextField1.setEditable(true); 
+        jTable1.clearSelection();
     }
      
     private Patient getPatientFromFields() throws ParseException {
@@ -102,11 +103,11 @@ public class patient extends javax.swing.JFrame {
     
      private void addTableSelectionListener() {
         jTable1.getSelectionModel().addListSelectionListener((ListSelectionEvent event) -> {
-            // Đảm bảo sự kiện chỉ chạy 1 lần khi click
+            
             if (!event.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
                 int selectedRow = jTable1.getSelectedRow();
                 
-                // Lấy dữ liệu từ hàng đã chọn và điền vào form
+                
                 jTextField1.setText(tableModel.getValueAt(selectedRow, 0).toString()); 
                 jTextField1.setEditable(false); 
                 
@@ -131,6 +132,30 @@ public class patient extends javax.swing.JFrame {
             }
         });
     }
+     
+      private void searchPatient() {
+         String patientID = jTextField7.getText().trim(); 
+         if (patientID.isEmpty()) {
+             loadPatients(); 
+             return;
+         }
+         
+         Patient patient = patientService.getPatientById(patientID);
+         
+         tableModel.setRowCount(0);
+         if (patient != null) {
+             tableModel.addRow(new Object[]{
+                 patient.getPatientID(),
+                 patient.getFullName(),
+                 patient.getDateOfBirth(),
+                 patient.getGender(),
+                 patient.getPhoneNumber(),
+                 patient.getAddress()
+             });
+         } else {
+             JOptionPane.showMessageDialog(this, "Không tìm thấy bệnh nhân với ID: " + patientID, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+         }
+     }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -521,28 +546,7 @@ public class patient extends javax.swing.JFrame {
 
     private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
         // TODO add your handling code here:
-         String patientID = jTextField7.getText();
-        if (patientID.isEmpty()) {
-            loadPatients(); 
-            return;
-        }
-        
-        Patient patient = patientService.getPatientById(patientID);
-        
-        tableModel.setRowCount(0); 
-        if (patient != null) {
-            // Hiển thị chỉ 1 kết quả
-            tableModel.addRow(new Object[]{
-                patient.getPatientID(),
-                patient.getFullName(),
-                patient.getDateOfBirth(),
-                patient.getGender(),
-                patient.getPhoneNumber(),
-                patient.getAddress()
-            });
-        } else {
-            JOptionPane.showMessageDialog(this, "Không tìm thấy bệnh nhân với ID: " + patientID, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-        }
+         searchPatient();
     }//GEN-LAST:event_jTextField7ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -556,7 +560,6 @@ public class patient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một bệnh nhân từ bảng!", "Lỗi", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
         int confirm = JOptionPane.showConfirmDialog(this, 
                 "Bạn có chắc chắn muốn xóa bệnh nhân '" + jTextField1.getText() + "' không?\n(LƯU Ý: Không thể xóa nếu bệnh nhân đang có bệnh án)", 
                 "Xác nhận xóa", 
@@ -595,6 +598,7 @@ public class patient extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+         searchPatient();
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
