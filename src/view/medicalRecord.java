@@ -203,9 +203,7 @@ public class medicalRecord extends javax.swing.JFrame {
         }
     }
     
-    /**
-     * Đổ dữ liệu Bệnh nhân, Bác sĩ, Phòng trống và Trạng thái vào ComboBoxes 
-     */
+    
     private void populateComboBoxes() {
         
         DefaultComboBoxModel<String> patientModel = new DefaultComboBoxModel<>();
