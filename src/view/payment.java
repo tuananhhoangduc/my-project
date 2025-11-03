@@ -47,7 +47,7 @@ public class payment extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(owner);
-        setTitle("Xác nhận Thanh toán cho BA: " + record.getRecordID());
+        setTitle("Xác nhận Thanh toán cho bệnh án: " + record.getRecordID());
 
         
         this.currentRecord = record;
@@ -66,77 +66,9 @@ public class payment extends javax.swing.JFrame {
              jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         }
 
-      
-        setupActionListener();
     }
     
-    private void setupActionListener() {
-        if (jButton1 != null) {
-            // Xóa listener cũ nếu có
-            for(ActionListener al : jButton1.getActionListeners()) {
-                 jButton1.removeActionListener(al);
-            }
-            // Thêm listener mới
-            jButton1.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    confirmDischargeAndPayment();
-                }
-            });
-        } else {
-             logger.warning("jButton1 (Nút Xác nhận) chưa được khởi tạo!");
-        }
-    }
     
-      private void confirmDischargeAndPayment() {
-        if (currentRecord == null) {
-            JOptionPane.showMessageDialog(this, "Thiếu thông tin bệnh án.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Xác nhận đã thanh toán đủ ("+ currencyFormat.format(totalCostDecimal) + ") và thực hiện xuất viện cho bệnh án " + currentRecord.getRecordID() + "?",
-                "Xác nhận Xuất viện",
-                JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                //Cập nhật MedicalRecord
-                Timestamp dischargeTime = new Timestamp(new Date().getTime());
-                currentRecord.setDischargeDate(dischargeTime);
-                currentRecord.setRecordStatus("Đã xuất viện");
-                medicalRecordService.updateMedicalRecord(currentRecord);
-
-                //Cập nhật Room 
-                String roomIdToUpdate = currentRecord.getRoomID();
-                if (roomIdToUpdate != null) {
-                     try {
-                        roomService.updateRoomOccupancy(roomIdToUpdate, -1);
-                        logger.info("Đã cập nhật phòng " + roomIdToUpdate + ", số người -1");
-                     } catch (SQLException roomEx) {
-                         logger.log(Level.SEVERE, "Lỗi khi cập nhật phòng " + roomIdToUpdate + " (-1)", roomEx);
-                         JOptionPane.showMessageDialog(this, "Đã cập nhật bệnh án nhưng có lỗi khi cập nhật trạng thái phòng:\n" + roomEx.getMessage(), "Lỗi Cập nhật Phòng", JOptionPane.WARNING_MESSAGE);
-                     }
-                }
-
-                JOptionPane.showMessageDialog(this, "Đã xuất viện và cập nhật trạng thái thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-
-                // 3. Gọi refreshData() của form cha
-                if (parentForm != null) {
-                    parentForm.refreshData();
-                }
-
-                dispose();
-
-            } catch (SQLException ex) {
-                logger.log(Level.SEVERE, "Lỗi SQL khi cập nhật xuất viện cho Record ID: " + currentRecord.getRecordID(), ex);
-                JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật CSDL:\n" + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception ex) {
-                 logger.log(Level.SEVERE, "Lỗi không xác định khi xuất viện", ex);
-                 JOptionPane.showMessageDialog(this, "Lỗi không xác định:\n" + ex.getMessage(), "Lỗi Hệ thống", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -159,6 +91,7 @@ public class payment extends javax.swing.JFrame {
 
         jLabel2.setText("Tiền mặt (VND) :");
 
+        jTextField1.setEditable(false);
         jTextField1.setEnabled(false);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,6 +102,11 @@ public class payment extends javax.swing.JFrame {
         jButton1.setBackground(new java.awt.Color(0, 204, 255));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Xác nhận ");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -210,6 +148,57 @@ public class payment extends javax.swing.JFrame {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (currentRecord == null) {
+            JOptionPane.showMessageDialog(this, "Thiếu thông tin bệnh án (Không thể chạy từ main).", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Xác nhận đã thanh toán đủ ("+ currencyFormat.format(totalCostDecimal) + ") và thực hiện xuất viện cho bệnh án " + currentRecord.getRecordID() + "?",
+                "Xác nhận Xuất viện",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                // Cập nhật MedicalRecord
+                Timestamp dischargeTime = new Timestamp(new Date().getTime());
+                currentRecord.setDischargeDate(dischargeTime);
+                currentRecord.setRecordStatus("Đã xuất viện");
+                medicalRecordService.updateMedicalRecord(currentRecord);
+
+                // Cập nhật Room
+                String roomIdToUpdate = currentRecord.getRoomID();
+                if (roomIdToUpdate != null) {
+                     try {
+                        roomService.updateRoomOccupancy(roomIdToUpdate, -1);
+                        logger.info("Đã cập nhật phòng " + roomIdToUpdate + ", số người -1");
+                     } catch (SQLException roomEx) {
+                         logger.log(Level.SEVERE, "Lỗi khi cập nhật phòng " + roomIdToUpdate + " (-1)", roomEx);
+                         JOptionPane.showMessageDialog(this, "Đã cập nhật bệnh án nhưng có lỗi khi cập nhật trạng thái phòng:\n" + roomEx.getMessage(), "Lỗi Cập nhật Phòng", JOptionPane.WARNING_MESSAGE);
+                     }
+                }
+
+                JOptionPane.showMessageDialog(this, "Đã xuất viện và cập nhật trạng thái thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+                
+                if (parentForm != null) {
+                    parentForm.refreshData();
+                }
+                
+                dispose(); 
+
+            } catch (SQLException ex) {
+                logger.log(Level.SEVERE, "Lỗi SQL khi cập nhật xuất viện cho Record ID: " + currentRecord.getRecordID(), ex);
+                JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật CSDL:\n" + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                 logger.log(Level.SEVERE, "Lỗi không xác định khi xuất viện", ex);
+                 JOptionPane.showMessageDialog(this, "Lỗi không xác định:\n" + ex.getMessage(), "Lỗi Hệ thống", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
