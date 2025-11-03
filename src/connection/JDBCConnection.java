@@ -23,7 +23,7 @@ public class JDBCConnection {
     public static Connection getJDBCConnection(){
         final String url = "jdbc:mysql://127.0.0.1:3306/hospitaldb_basic";
         final String user = "root";
-        final String password = "221230734";
+        final String password = "221230734"  ;
         
         
         try {
