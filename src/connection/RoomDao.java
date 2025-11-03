@@ -171,7 +171,7 @@ public class RoomDao {
                 room.setCapacity(rs.getInt("Capacity"));
                 room.setCurrentOccupancy(rs.getInt("CurrentOccupancy"));
                 room.setStatus(rs.getString("Status"));
-                room.setPricePerDay(rs.getBigDecimal("PricePerDay")); // --- SỬA: Lấy giá ---
+                room.setPricePerDay(rs.getBigDecimal("PricePerDay")); 
                 rooms.add(room);
             }
         } catch (SQLException ex) {
