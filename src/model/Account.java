@@ -11,7 +11,7 @@ package model;
  * Bài Tập : 
  */
 public class Account {
-     private String username;
+    private String username;
     private String password;
     private String role; 
     private String AccountId;
