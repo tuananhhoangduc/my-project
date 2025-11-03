@@ -126,8 +126,6 @@ public class RoomDao {
             // Tính toán số lượng người mới
             int newOccupancy = currentOccupancy + change;
             if (newOccupancy < 0) newOccupancy = 0; 
-
-            // Sửa lại câu UPDATE để dùng giá trị newOccupancy tính toán status
              sqlUpdate = "UPDATE Rooms SET CurrentOccupancy = ?, " +
                            "Status = CASE " +
                            " WHEN ? <= 0 THEN 'Trống' " +
