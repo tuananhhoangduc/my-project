@@ -88,7 +88,7 @@ public class AccountDao {
 
             ps.setString(1, account.getAccountId());
             ps.setString(2, account.getUsername());
-            ps.setString(3, account.getPassword()); // Cần mã hóa mật khẩu
+            ps.setString(3, account.getPassword()); 
             ps.setString(4, account.getRole());
 
             ps.executeUpdate();
