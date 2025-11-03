@@ -52,7 +52,6 @@ public class roompanel extends javax.swing.JPanel {
         if (occupancyLabel != null) occupancyLabel.setText("Số người: " + roomData.getCurrentOccupancy() + "/" + roomData.getCapacity());
         if (statusLabel != null) statusLabel.setText("Trạng thái: " + roomData.getStatus());
 
-        // --- Logic đặt màu nền ---
         Color backgroundColor = Color.LIGHT_GRAY; 
         if (roomData.getStatus() != null) {
             String statusLower = roomData.getStatus().toLowerCase();
@@ -63,7 +62,6 @@ public class roompanel extends javax.swing.JPanel {
              } else { 
                  backgroundColor = COLOR_FULL;
              }
-             // Ghi đè nếu trạng thái là đầy/trống rõ ràng (dù số lượng có thể khác)
              if ("trống".equals(statusLower)) {
                  backgroundColor = COLOR_EMPTY;
              } else if ("đầy".equals(statusLower)) {
