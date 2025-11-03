@@ -118,7 +118,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Component id="jButtonExit" alignment="1" max="32767" attributes="0"/>
+              <Component id="jLabelExit" alignment="1" max="32767" attributes="0"/>
               <Component id="jLabel5" alignment="1" max="32767" attributes="0"/>
               <Component id="jLabel4" alignment="1" max="32767" attributes="0"/>
               <Component id="jLabel3" alignment="1" max="32767" attributes="0"/>
@@ -143,7 +143,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabel5" min="-2" pref="42" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jButtonExit" min="-2" pref="89" max="-2" attributes="0"/>
+                  <Component id="jLabelExit" min="-2" pref="89" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -166,6 +166,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="B&#xc1;C S&#x128;"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel2MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
@@ -181,6 +184,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="B&#x1ec6;NH NH&#xc2;N"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel3MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
@@ -196,6 +202,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="B&#x1ec6;NH &#xc1;N"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel4MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel1">
           <Properties>
@@ -211,6 +220,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="PH&#xd2;NG B&#x1ec6;NH"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel1MouseClicked"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
@@ -226,8 +238,11 @@
             </Property>
             <Property name="text" type="java.lang.String" value="T&#xc0;I KHO&#x1ea2;N"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabel5MouseClicked"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JLabel" name="jButtonExit">
+        <Component class="javax.swing.JLabel" name="jLabelExit">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="12" style="1"/>
@@ -242,7 +257,7 @@
             <Property name="text" type="java.lang.String" value="THO&#xc1;T"/>
           </Properties>
           <Events>
-            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jButtonExitMouseClicked"/>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jLabelExitMouseClicked"/>
           </Events>
         </Component>
       </SubComponents>
