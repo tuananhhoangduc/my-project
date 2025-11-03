@@ -31,9 +31,7 @@ public class room extends javax.swing.JFrame {
     }
     
     private void loadAndDisplayRooms() {
-        
         roomGridPanel.removeAll(); 
-
         try {
             List<Room> rooms = roomService.getAllRooms(); 
             if (rooms == null || rooms.isEmpty()) {
@@ -66,7 +64,6 @@ public class room extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Lỗi nghiêm trọng khi tải dữ liệu phòng:\n" + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
 
-        
         roomGridPanel.revalidate();
         roomGridPanel.repaint();
          if (jScrollPane1 != null) {
