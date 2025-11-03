@@ -9,10 +9,6 @@ import service.RoomService;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -21,16 +17,14 @@ import java.util.logging.Logger;
  */
 public class roompanel extends javax.swing.JPanel {
     private static final Logger logger = Logger.getLogger(roompanel.class.getName());
-    private RoomService roomService = new RoomService(); // Khởi tạo Service
-    private final Color COLOR_EMPTY = new Color(198, 239, 206); // Xanh lá nhạt (Trống)
-    private final Color COLOR_AVAILABLE = new Color(255, 243, 205); // Vàng nhạt (Còn chỗ)
-    private final Color COLOR_FULL = new Color(255, 205, 210); // Đỏ nhạt (Đầy)
-    private final SimpleDateFormat dobFormat = new SimpleDateFormat("dd/MM/yyyy");
+    
+    private final Color COLOR_EMPTY = new Color(198, 239, 206); // Xanh lá nhạt 
+    private final Color COLOR_AVAILABLE = new Color(255, 243, 205); // Vàng nhạt 
+    private final Color COLOR_FULL = new Color(255, 205, 210); // Đỏ nhạt 
+    
 
     private Room roomData;
-    /**
-     * Creates new form roompanel1
-     */
+    
     public roompanel() {
         initComponents();
         
@@ -46,28 +40,27 @@ public class roompanel extends javax.swing.JPanel {
         setPreferredSize(new Dimension(120, 100)); 
 
         displayRoomInfo(); 
-        setupClickListener(); 
+        setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
     
     private void displayRoomInfo() {
         if (roomData == null) return;
 
-        // Đảm bảo các JLabel đã được khởi tạo (từ initComponents)
+        
         if (numberLabel != null) numberLabel.setText("Phòng: " + roomData.getRoomNumber());
         if (typeLabel != null) typeLabel.setText(roomData.getRoomType());
         if (occupancyLabel != null) occupancyLabel.setText("Số người: " + roomData.getCurrentOccupancy() + "/" + roomData.getCapacity());
         if (statusLabel != null) statusLabel.setText("Trạng thái: " + roomData.getStatus());
 
         // --- Logic đặt màu nền ---
-        Color backgroundColor = Color.LIGHT_GRAY; // Màu mặc định
+        Color backgroundColor = Color.LIGHT_GRAY; 
         if (roomData.getStatus() != null) {
             String statusLower = roomData.getStatus().toLowerCase();
-             // Ưu tiên kiểm tra số lượng trước
              if (roomData.getCurrentOccupancy() == 0) {
                  backgroundColor = COLOR_EMPTY;
              } else if (roomData.getCurrentOccupancy() < roomData.getCapacity()) {
                  backgroundColor = COLOR_AVAILABLE;
-             } else { // >= capacity
+             } else { 
                  backgroundColor = COLOR_FULL;
              }
              // Ghi đè nếu trạng thái là đầy/trống rõ ràng (dù số lượng có thể khác)
@@ -78,10 +71,10 @@ public class roompanel extends javax.swing.JPanel {
              }
         }
         setBackground(backgroundColor);
-        updateLabelForeground(backgroundColor); // Cập nhật màu chữ
+        updateLabelForeground(backgroundColor); 
     }
 
-    /** Cập nhật màu chữ của JLabel để dễ đọc trên nền */
+    
     private void updateLabelForeground(Color background) {
         double luminance = (0.299 * background.getRed() + 0.587 * background.getGreen() + 0.114 * background.getBlue()) / 255;
         Color foreground = (luminance > 0.5) ? Color.BLACK : Color.WHITE;
@@ -90,52 +83,6 @@ public class roompanel extends javax.swing.JPanel {
         if (typeLabel != null) typeLabel.setForeground(foreground);
         if (occupancyLabel != null) occupancyLabel.setForeground(foreground);
         if (statusLabel != null) statusLabel.setForeground(foreground);
-    }
-
-
-    private void setupClickListener() {
-        // Chỉ cho phép click nếu phòng đang có người
-        if (roomData != null && roomData.getCurrentOccupancy() > 0) {
-            setCursor(new Cursor(Cursor.HAND_CURSOR)); // Đổi con trỏ
-
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    showPatientDetails();
-                }
-                // --- THÊM MỚI: Hiệu ứng khi di chuột ---
-                 @Override
-                 public void mouseEntered(MouseEvent e) {
-                     setBorder(BorderFactory.createLineBorder(Color.BLUE, 2)); // Viền xanh đậm khi di vào
-                 }
-                 @Override
-                 public void mouseExited(MouseEvent e) {
-                     setBorder(BorderFactory.createLineBorder(Color.GRAY)); // Trở lại viền xám
-                 }
-                 // --- KẾT THÚC THÊM MỚI ---
-            });
-        } else {
-            setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-            setToolTipText("Phòng trống"); // Gợi ý
-        }
-    }
-
-    /** Lấy danh sách bệnh nhân và hiển thị trong Dialog */
-    private void showPatientDetails() {
-        if (roomData == null) return;
-
-        try {
-            List<Patient> patientsInRoom = roomService.getPatientsInRoom(roomData.getRoomID());
-            // Lấy Frame cha (home) để hiển thị Dialog ở giữa
-            Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(this);
-//            patientDetailDialog dialog = new patientDetailDialog(parentFrame, true, roomData.getRoomNumber(), patientsInRoom);
-//            dialog.setVisible(true);
-        } catch (Exception ex) {
-            logger.log(Level.SEVERE, "Lỗi khi lấy hoặc hiển thị chi tiết bệnh nhân phòng " + roomData.getRoomNumber(), ex);
-            JOptionPane.showMessageDialog(this,
-                "Lỗi khi xem chi tiết bệnh nhân:\n" + ex.getMessage(),
-                "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
     }
     
     /**
