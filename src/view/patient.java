@@ -46,7 +46,7 @@ public class patient extends javax.swing.JFrame {
     }
     
      private void loadPatients() {
-        tableModel.setRowCount(0); // Xóa dữ liệu cũ
+        tableModel.setRowCount(0); 
         try {
             List<Patient> patients = patientService.getAllPatients();
             for (Patient p : patients) {
@@ -380,6 +380,11 @@ public class patient extends javax.swing.JFrame {
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/search.png"))); // NOI18N
         jButton6.setText("Tìm kiếm");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -587,6 +592,10 @@ public class patient extends javax.swing.JFrame {
         clearFields();
         jTextField7.setText("");
     }//GEN-LAST:event_REFRESHActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
