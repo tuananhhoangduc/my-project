@@ -11,6 +11,9 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.JFrame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author LOQ
@@ -32,69 +35,86 @@ public class doctor extends javax.swing.JFrame {
         
         initializeTable();
         loadDoctors();
-        addListeners();
+        addTableSelectionListener();
     }
     
     private void initializeTable() {
         tableModel = new DefaultTableModel();
-        // Đặt tên cột (phải khớp với CSDL)
         tableModel.setColumnIdentifiers(new String[]{"ID", "Họ Tên", "Giới tính", "SĐT", "Chuyên khoa"});
         jTable1.setModel(tableModel);
     }
     
-    // --- THÊM MỚI: Hàm tải dữ liệu lên JTable ---
+     
     private void loadDoctors() {
-        // Xóa dữ liệu cũ
+        if (tableModel == null) return;
         tableModel.setRowCount(0); 
         
-        List<Doctor> doctors = doctorService.getAllDoctors();
-        for (Doctor doc : doctors) {
-            tableModel.addRow(new Object[]{
-                doc.getDoctorID(),
-                doc.getFullName(),
-                doc.getGender(),
-                doc.getPhoneNumber(),
-                doc.getSpecialty()
-            });
+        try {
+            List<Doctor> doctors = doctorService.getAllDoctors(); // Lỗi NullPointerException nếu service null
+            if (doctors == null) {
+                 logger.warning("DoctorService.getAllDoctors() trả về null.");
+                 JOptionPane.showMessageDialog(this, "Không thể tải danh sách bác sĩ (null).", "Lỗi Service", JOptionPane.ERROR_MESSAGE);
+                 return;
+            }
+            
+            for (Doctor doc : doctors) {
+                tableModel.addRow(new Object[]{
+                    doc.getDoctorID(),
+                    doc.getFullName(),
+                    doc.getGender(),
+                    doc.getPhoneNumber(),
+                    doc.getSpecialty()
+                });
+            }
+        } catch (Exception ex) {
+             logger.log(Level.SEVERE, "Lỗi khi tải danh sách bác sĩ", ex);
+             JOptionPane.showMessageDialog(this, "Lỗi tải danh sách bác sĩ:\n" + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    // --- THÊM MỚI: Hàm xóa trắng các ô input ---
+
     private void clearFields() {
-        jTextField1.setText(""); // ID
-        jTextField2.setText(""); // Name
-        jTextField3.setText(""); // Phone
-        jTextField4.setText(""); // Specialty
-        buttonGroup1.clearSelection(); // Xóa chọn Nam/Nữ
-        jTextField1.setEditable(true); // Cho phép sửa ID
+        jTextField1.setText(""); 
+        jTextField2.setText(""); 
+        jTextField3.setText(""); 
+        jTextField4.setText(""); 
+        if (buttonGroup1 != null) { 
+            buttonGroup1.clearSelection(); 
+        }
+        jTextField1.setEditable(true); 
+        jTable1.clearSelection(); 
     }
     
-    // --- THÊM MỚI: Hàm thêm sự kiện cho các nút ---
-    private void addListeners() {
-        // Nút ADD (jButton1)
-        jButton1.addActionListener(e -> addDoctor());
+    private Doctor getDoctorFromFields() {
+        Doctor doctor = new Doctor();
+        doctor.setDoctorID(jTextField1.getText().trim());
+        doctor.setFullName(jTextField2.getText().trim());
+        doctor.setPhoneNumber(jTextField3.getText().trim());
+        doctor.setSpecialty(jTextField4.getText().trim());
         
-        // Nút UPDATE (jButton2)
-        jButton2.addActionListener(e -> updateDoctor());
+        if (jRadioButton1.isSelected()) {
+            doctor.setGender("Nam");
+        } else if (jRadioButton2.isSelected()) {
+            doctor.setGender("Nữ");
+        } else {
+            doctor.setGender(null); 
+        }
+        
+        return doctor;
+    }
 
-        // Nút DELETE (jButton3)
-        jButton3.addActionListener(e -> deleteDoctor());
-        
-        // Nút CLEAR (jButton4)
-        jButton4.addActionListener(e -> clearFields());
-
-        // Nút BACK (jButton5)
-        jButton5.addActionListener(e -> this.dispose()); 
-        
-        // Sự kiện Click vào JTable
+    
+    private void addTableSelectionListener() {
+        if (jTable1 == null) return;
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent event) {
                 if (!event.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
-                    // Lấy dữ liệu từ hàng được chọn
                     int selectedRow = jTable1.getSelectedRow();
+                    if (selectedRow >= tableModel.getRowCount()) return; 
+
                     jTextField1.setText(tableModel.getValueAt(selectedRow, 0).toString()); // ID
-                    jTextField1.setEditable(false); // Không cho sửa ID khi đã chọn
+                    jTextField1.setEditable(false); 
+                    
                     jTextField2.setText(tableModel.getValueAt(selectedRow, 1).toString()); // Name
                     
                     Object genderObj = tableModel.getValueAt(selectedRow, 2);
@@ -105,108 +125,17 @@ public class doctor extends javax.swing.JFrame {
                     } else if ("Nữ".equals(gender)) {
                         jRadioButton2.setSelected(true);
                     } else {
-                        buttonGroup1.clearSelection();
+                        if (buttonGroup1 != null) buttonGroup1.clearSelection();
                     }
                     
-                    jTextField3.setText(tableModel.getValueAt(selectedRow, 3).toString()); // Phone
-                    jTextField4.setText(tableModel.getValueAt(selectedRow, 4).toString()); // Specialty
+                    Object phoneObj = tableModel.getValueAt(selectedRow, 3);
+                    jTextField3.setText(phoneObj != null ? phoneObj.toString() : ""); 
+                    
+                    Object specialtyObj = tableModel.getValueAt(selectedRow, 4);
+                    jTextField4.setText(specialtyObj != null ? specialtyObj.toString() : ""); 
                 }
             }
         });
-    }
-
-    private void addDoctor() {
-        try {
-            Doctor doctor = new Doctor();
-            doctor.setDoctorID(jTextField1.getText());
-            doctor.setFullName(jTextField2.getText());
-            doctor.setPhoneNumber(jTextField3.getText());
-            doctor.setSpecialty(jTextField4.getText());
-            
-            if (jRadioButton1.isSelected()) {
-                doctor.setGender("Nam");
-            } else if (jRadioButton2.isSelected()) {
-                doctor.setGender("Nữ");
-            } else {
-                doctor.setGender(null); // Hoặc bạn có thể báo lỗi
-            }
-            
-            if (doctor.getDoctorID().isEmpty()) {
-                 JOptionPane.showMessageDialog(this, "ID Bác sĩ không được để trống!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            doctorService.addDoctor(doctor);
-            JOptionPane.showMessageDialog(this, "Thêm bác sĩ thành công!");
-            loadDoctors(); 
-            clearFields(); 
-            
-        } catch (SQLException ex) {
-            if (ex.getMessage().contains("Duplicate entry")) {
-                 JOptionPane.showMessageDialog(this, "Lỗi: ID Bác sĩ '" + jTextField1.getText() + "' đã tồn tại!", "Lỗi Trùng lặp", JOptionPane.ERROR_MESSAGE);
-            } else {
-                 JOptionPane.showMessageDialog(this, "Lỗi khi thêm bác sĩ: " + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
-            }
-        }
-    }
-    
-    // --- THÊM MỚI: Logic cho nút UPDATE ---
-    private void updateDoctor() {
-        try {
-            if (jTable1.getSelectedRow() == -1) {
-                 JOptionPane.showMessageDialog(this, "Vui lòng chọn một bác sĩ từ bảng để cập nhật!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-                 return;
-            }
-            
-            Doctor doctor = new Doctor();
-            doctor.setDoctorID(jTextField1.getText()); // Lấy ID từ ô (đã bị khóa)
-            doctor.setFullName(jTextField2.getText());
-            doctor.setPhoneNumber(jTextField3.getText());
-            doctor.setSpecialty(jTextField4.getText());
-            
-            if (jRadioButton1.isSelected()) {
-                doctor.setGender("Nam");
-            } else if (jRadioButton2.isSelected()) {
-                doctor.setGender("Nữ");
-            } else {
-                doctor.setGender(null);
-            }
-
-            doctorService.updateDoctor(doctor);
-            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
-            loadDoctors();
-            clearFields();
-            
-        } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    // --- THÊM MỚI: Logic cho nút DELETE ---
-    private void deleteDoctor() {
-        if (jTable1.getSelectedRow() == -1) {
-             JOptionPane.showMessageDialog(this, "Vui lòng chọn một bác sĩ từ bảng để xóa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
-             return;
-        }
-        
-        // Xác nhận xóa
-        int confirm = JOptionPane.showConfirmDialog(this, 
-                "Bạn có chắc chắn muốn xóa bác sĩ '" + jTextField1.getText() + "' không?", 
-                "Xác nhận xóa", 
-                JOptionPane.YES_NO_OPTION);
-        
-        if (confirm == JOptionPane.YES_OPTION) {
-            try {
-                String doctorID = jTextField1.getText();
-                doctorService.deleteDoctor(doctorID);
-                JOptionPane.showMessageDialog(this, "Xóa thành công!");
-                loadDoctors();
-                clearFields();
-                
-            } catch (SQLException ex) {
-                 JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
-            }
-        }
     }
 
     /**
@@ -250,6 +179,11 @@ public class doctor extends javax.swing.JFrame {
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/arrow.png"))); // NOI18N
         jButton5.setText("BACK");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(204, 255, 255));
@@ -324,10 +258,20 @@ public class doctor extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/delete.png"))); // NOI18N
         jButton3.setText("DELETE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/eraser.png"))); // NOI18N
         jButton4.setText("CLEAR");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Giới tính");
@@ -483,11 +427,92 @@ public class doctor extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        try {
+            Doctor doctor = getDoctorFromFields(); 
+            
+            if (doctor.getDoctorID().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "ID Bác sĩ không được để trống!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            doctorService.addDoctor(doctor); 
+            JOptionPane.showMessageDialog(this, "Thêm bác sĩ thành công!");
+            loadDoctors(); 
+            clearFields(); 
+            
+        } catch (SQLException ex) {
+            if (ex.getMessage().contains("Duplicate entry")) {
+                 JOptionPane.showMessageDialog(this, "Lỗi: ID Bác sĩ '" + jTextField1.getText() + "' đã tồn tại!", "Lỗi Trùng lặp", JOptionPane.ERROR_MESSAGE);
+            } else {
+                 JOptionPane.showMessageDialog(this, "Lỗi khi thêm bác sĩ: " + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+             logger.log(Level.SEVERE, "Lỗi không xác định khi thêm bác sĩ", ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+         try {
+            if (jTable1.getSelectedRow() == -1) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn một bác sĩ từ bảng để cập nhật!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            Doctor doctor = getDoctorFromFields(); 
+            
+            doctorService.updateDoctor(doctor);
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+            loadDoctors();
+            clearFields();
+            
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(this, "Lỗi khi cập nhật: " + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+             logger.log(Level.SEVERE, "Lỗi không xác định khi cập nhật", ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (jTable1.getSelectedRow() == -1) {
+             JOptionPane.showMessageDialog(this, "Vui lòng chọn một bác sĩ từ bảng để xóa!", "Lỗi", JOptionPane.WARNING_MESSAGE);
+             return;
+        }
+        
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Bạn có chắc chắn muốn xóa bác sĩ '" + jTextField1.getText() + "' không?\n(LƯU Ý: Không thể xóa nếu bác sĩ đang có bệnh án)", 
+                "Xác nhận xóa", 
+                JOptionPane.YES_NO_OPTION);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                String doctorID = jTextField1.getText();
+                doctorService.deleteDoctor(doctorID);
+                JOptionPane.showMessageDialog(this, "Xóa thành công!");
+                loadDoctors();
+                clearFields();
+                
+            } catch (SQLException ex) {
+                 if (ex.getMessage().contains("foreign key constraint fails")) {
+                    JOptionPane.showMessageDialog(this, "Lỗi: Không thể xóa bác sĩ đang có bệnh án!", "Lỗi Ràng buộc", JOptionPane.ERROR_MESSAGE);
+                 } else {
+                    JOptionPane.showMessageDialog(this, "Lỗi khi xóa: " + ex.getMessage(), "Lỗi SQL", JOptionPane.ERROR_MESSAGE);
+                 }
+            } catch (Exception ex) {
+                 logger.log(Level.SEVERE, "Lỗi không xác định khi xóa", ex);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        clearFields();
+        loadDoctors();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
