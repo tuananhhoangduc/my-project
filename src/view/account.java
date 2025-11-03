@@ -76,7 +76,7 @@ public class account extends javax.swing.JFrame {
         Account account = new Account();
         if(jTextField1 != null) account.setAccountId(jTextField1.getText().trim());
         if(jTextField2 != null) account.setUsername(jTextField2.getText().trim());
-        if(jTextField3 != null) account.setPassword(jTextField3.getText().trim()); // Lấy pass
+        if(jTextField3 != null) account.setPassword(jTextField3.getText().trim()); 
         
         if(jRadioButton1 != null && jRadioButton1.isSelected()) {
             account.setRole("Doctor"); 
