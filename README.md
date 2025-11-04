@@ -1,4 +1,4 @@
-## projectJava — Ứng dụng quản lý bệnh viện (Java Swing + MySQL)
+## ProjectJava — Ứng dụng quản lý bệnh viện (Java Swing + MySQL)
 
 ### Giới thiệu
 Ứng dụng desktop quản lý bệnh viện xây dựng bằng Java Swing, tổ chức theo mô hình DAO/Service/View. Dự án hỗ trợ các nghiệp vụ cơ bản:
