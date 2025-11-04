@@ -128,9 +128,9 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButtonBack" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="-2" pref="288" max="-2" attributes="0"/>
+                  <EmptySpace pref="303" max="32767" attributes="0"/>
                   <Component id="jLabel12" min="-2" pref="178" max="-2" attributes="0"/>
-                  <EmptySpace pref="308" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="293" max="-2" attributes="0"/>
                   <Component id="jButtonRefresh" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               </Group>
@@ -221,13 +221,11 @@
                               <Component id="jLabel1" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jComboBoxStatus" min="-2" pref="100" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jTextFieldAdmissionDate" pref="157" max="32767" attributes="0"/>
-                                  <Component id="jTextFieldDischargeDate" max="32767" attributes="0"/>
-                              </Group>
-                              <Component id="jComboBoxRoom" alignment="0" min="-2" pref="113" max="-2" attributes="0"/>
+                              <Component id="jTextFieldAdmissionDate" max="32767" attributes="0"/>
+                              <Component id="jTextFieldDischargeDate" max="32767" attributes="0"/>
+                              <Component id="jComboBoxRoom" alignment="0" pref="157" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
