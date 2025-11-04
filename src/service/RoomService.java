@@ -29,10 +29,6 @@ public class RoomService {
         return roomDao.getAllRooms();
     }
     
-    public List<Patient> getPatientsInRoom(String roomId) {
-        return roomDao.getPatientsInRoom(roomId);
-    }
-    
     public void updateRoomOccupancy(String roomId, int change) throws SQLException {
         roomDao.updateRoomOccupancy(roomId, change);
     }
