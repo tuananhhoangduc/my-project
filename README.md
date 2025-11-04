@@ -86,5 +86,4 @@ java -cp "dist/projectCSDL.jar:dist/lib/*" view.Loading
 - Nếu gặp lỗi thiếu driver MySQL, kiểm tra classpath có chứa `mysql-connector-j-*.jar` khi chạy.
 - Cập nhật thông tin đăng nhập DB trong `JDBCConnection.java` trước khi chạy.
 
-### License
-Chưa chỉ định. Bạn có thể thêm giấy phép (MIT/Apache-2.0/GPL-3.0, ...) nếu công bố công khai.
+
