@@ -101,22 +101,26 @@ public class roompanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(120, 100));
         setLayout(new java.awt.GridLayout(4, 1));
 
+        numberLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         numberLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         numberLabel.setText(" Phòng : ");
         numberLabel.setAlignmentX(0.5F);
         numberLabel.setFocusable(false);
         add(numberLabel);
 
+        occupancyLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         occupancyLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         occupancyLabel.setText("Số người :");
         occupancyLabel.setAlignmentX(0.5F);
         add(occupancyLabel);
 
+        statusLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         statusLabel.setText("Trạng thái : ");
         statusLabel.setAlignmentX(0.5F);
         add(statusLabel);
 
+        typeLabel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         typeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         typeLabel.setText("Loại : ");
         typeLabel.setAlignmentX(0.5F);
