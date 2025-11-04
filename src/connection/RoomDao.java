@@ -50,40 +50,6 @@ public class RoomDao {
         return rooms;
     }
     
-    // Lấy danh sách bệnh nhân đang ở trong một phòng cụ thể
-    public List<Patient> getPatientsInRoom(String roomId) {
-        List<Patient> patients = new ArrayList<>();
-        String sql = "SELECT p.* FROM Patients p " +
-                     "JOIN MedicalRecords mr ON p.PatientID = mr.PatientID " +
-                     "WHERE mr.RoomID = ? AND mr.RecordStatus = 'Đang điều trị'"; // Chỉ lấy BN đang điều trị
-
-        try (Connection connection = JDBCConnection.getJDBCConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, roomId);
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    Patient patient = new Patient();
-                    patient.setPatientID(rs.getString("PatientID"));
-                    patient.setFullName(rs.getString("FullName"));
-                    patient.setDateOfBirth(rs.getDate("DateOfBirth"));
-                    patient.setGender(rs.getString("Gender"));
-                    patient.setPhoneNumber(rs.getString("PhoneNumber"));
-                    try {
-                        patient.setAddress(rs.getString("Address"));
-                    } catch (SQLException e) {
-                        logger.log(Level.FINE, "Cột Address không tồn tại hoặc lỗi khi lấy Address cho Patient " + patient.getPatientID(), e);
-                    }
-                    patients.add(patient);
-                }
-            }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, "Lỗi khi lấy bệnh nhân trong phòng " + roomId, ex);
-        }
-        return patients;
-    }
-    
-    //  Cập nhật số lượng người hiện tại và trạng thái phòng
     public void updateRoomOccupancy(String roomId, int change) throws SQLException {
         Connection connection = null;
         PreparedStatement updateStmt = null;
@@ -123,7 +89,6 @@ public class RoomDao {
                  return; 
             }
 
-            // Tính toán số lượng người mới
             int newOccupancy = currentOccupancy + change;
             if (newOccupancy < 0) newOccupancy = 0; 
              sqlUpdate = "UPDATE Rooms SET CurrentOccupancy = ?, " +
@@ -133,8 +98,6 @@ public class RoomDao {
                            " ELSE 'Đầy' END " +
                            "WHERE RoomID = ?";
 
-
-            // Cập nhật
             updateStmt = connection.prepareStatement(sqlUpdate);
             updateStmt.setInt(1, newOccupancy); 
             updateStmt.setInt(2, newOccupancy); 
@@ -151,7 +114,7 @@ public class RoomDao {
         } finally {
             if (updateStmt != null) try { updateStmt.close(); } catch (SQLException e) {}
             if (selectStmt != null) try { selectStmt.close(); } catch (SQLException e) {}
-            if (connection != null) try { connection.setAutoCommit(true); /* connection.close(); */ } catch (SQLException e) {}
+            if (connection != null) try { connection.setAutoCommit(true); } catch (SQLException e) {}
         }
     }
     
