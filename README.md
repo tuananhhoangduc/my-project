@@ -25,7 +25,7 @@ Dữ liệu kết nối tới MySQL thông qua `connection.JDBCConnection` và c
 
 ### Cài đặt cơ sở dữ liệu
 1. Tạo CSDL MySQL (ví dụ tên `hospitaldb_basic`).
-2. Import schema và dữ liệu mẫu từ file sql `Data.sql` . Nếu chưa có script, bạn có thể tự tạo các bảng phù hợp với các thực thể: `Account`, `User`, `Doctor`, `Patient`, `Room`, `MedicalRecord`.
+2. Import schema hoặc dữ liệu mẫu từ file sql `Data.sql` . Bạn có thể tự tạo các bảng phù hợp với các thực thể: `Account`, `User`, `Doctor`, `Patient`, `Room`, `MedicalRecord`.
 4. Cập nhật cấu hình kết nối trong tệp:
    - `src/connection/JDBCConnection.java`
    - Các thông số mặc định hiện tại:
